@@ -1,0 +1,214 @@
+﻿<div class="tournament-controls">
+  <button class="control-btn reset-btn" (click)="resetTournament()">
+    ↻ RESET TOURNAMENT
+  </button>
+  <button class="control-btn empty-btn" (click)="emptyTournament()">
+    ✕ EMPTY TOURNAMENT
+  </button>
+  <button class="control-btn randomize-btn" (click)="randomizePlaces()">
+    ⚡ RANDOMIZE PLACES
+  </button>
+</div>
+
+<div class="bracket-container">
+  <div class="round round-1">
+    <div class="round-title">ROUND OF 16</div>
+
+    <div class="match-group">
+      <div class="match" *ngFor="let matchIndex of [0, 1, 2, 3]">
+        <div class="match-connector right"></div>
+        <div class="player" [class.player-inactive]="isPlayerSlotDisabled(matchIndex * 2)">
+          <input class="player-name"
+                 [value]="getPlayerById(matchIndex * 2)?.name || getPlayerLabel(matchIndex * 2)"
+                 (input)="onChangePlayersName($any($event.target).value, matchIndex * 2)"
+                 [disabled]="isPlayerSlotDisabled(matchIndex * 2)" />
+          <span class="player-score">{{ getPlayerById(matchIndex * 2)?.totalWins || 0 }}</span>
+        </div>
+        <div class="player" [class.player-inactive]="isPlayerSlotDisabled(matchIndex * 2 + 1)">
+          <input class="player-name"
+                 [value]="getPlayerById(matchIndex * 2 + 1)?.name || getPlayerLabel(matchIndex * 2 + 1)"
+                 (input)="onChangePlayersName($any($event.target).value, matchIndex * 2 + 1)"
+                 [disabled]="isPlayerSlotDisabled(matchIndex * 2 + 1)" />
+          <span class="player-score">{{ getPlayerById(matchIndex * 2 + 1)?.totalWins || 0 }}</span>
+        </div>
+        <div class="match-actions">
+          <button class="play-btn" 
+                  (click)="playRound(matchIndex)"
+                  [disabled]="isPlayerSlotDisabled(matchIndex * 2) || isPlayerSlotDisabled(matchIndex * 2 + 1)">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="getPlayerById(matchIndex * 2) && !isPlayerSlotDisabled(matchIndex * 2)"
+                    (click)="selectRoundWinner(matchIndex, 0)">
+              ✓ {{ getPlayerById(matchIndex * 2)!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="getPlayerById(matchIndex * 2 + 1) && !isPlayerSlotDisabled(matchIndex * 2 + 1)"
+                    (click)="selectRoundWinner(matchIndex, 1)">
+              ✓ {{ getPlayerById(matchIndex * 2 + 1)!.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="match-group">
+      <div class="match" *ngFor="let matchIndex of [4, 5, 6, 7]">
+        <div class="match-connector right"></div>
+        <div class="player" [class.player-inactive]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)">
+          <input class="player-name"
+                 [value]="getPlayerById((matchIndex - 4) * 2 + 8)?.name || getPlayerLabel((matchIndex - 4) * 2 + 8)"
+                 (input)="onChangePlayersName($any($event.target).value, (matchIndex - 4) * 2 + 8)"
+                 [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)" />
+          <span class="player-score">{{ getPlayerById((matchIndex - 4) * 2 + 8)?.totalWins || 0 }}</span>
+        </div>
+        <div class="player" [class.player-inactive]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)">
+          <input class="player-name"
+                 [value]="getPlayerById((matchIndex - 4) * 2 + 9)?.name || getPlayerLabel((matchIndex - 4) * 2 + 9)"
+                 (input)="onChangePlayersName($any($event.target).value, (matchIndex - 4) * 2 + 9)"
+                 [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)" />
+          <span class="player-score">{{ getPlayerById((matchIndex - 4) * 2 + 9)?.totalWins || 0 }}</span>
+        </div>
+        <div class="match-actions">
+          <button class="play-btn" 
+                  (click)="playRound(matchIndex)"
+                  [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8) || isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="getPlayerById((matchIndex - 4) * 2 + 8) && !isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)"
+                    (click)="selectRoundWinner(matchIndex, 0)">
+              ✓ {{ getPlayerById((matchIndex - 4) * 2 + 8)!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="getPlayerById((matchIndex - 4) * 2 + 9) && !isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)"
+                    (click)="selectRoundWinner(matchIndex, 1)">
+              ✓ {{ getPlayerById((matchIndex - 4) * 2 + 9)!.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="round round-2">
+    <div class="round-title">QUARTERFINALS</div>
+
+    <div class="match-group">
+      <div class="match" *ngFor="let matchIndex of [0, 1, 2, 3]">
+        <div class="player">
+          <span class="player-name">{{ roundWinners[matchIndex * 2]?.name || 'TBD' }}</span>
+          <span class="player-score">{{ roundWinners[matchIndex * 2]?.totalWins || 0 }}</span>
+        </div>
+        <div class="player">
+          <span class="player-name">{{ roundWinners[matchIndex * 2 + 1]?.name || 'TBD' }}</span>
+          <span class="player-score">{{ roundWinners[matchIndex * 2 + 1]?.totalWins || 0 }}</span>
+        </div>
+        <div class="match-actions">
+          <button class="play-btn" 
+                  (click)="playQuarter(matchIndex)"
+                  [disabled]="!roundWinners[matchIndex * 2] || !roundWinners[matchIndex * 2 + 1]">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="roundWinners[matchIndex * 2]"
+                    (click)="selectQuarterWinner(matchIndex, 0)">
+              ✓ {{ roundWinners[matchIndex * 2]!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="roundWinners[matchIndex * 2 + 1]"
+                    (click)="selectQuarterWinner(matchIndex, 1)">
+              ✓ {{ roundWinners[matchIndex * 2 + 1]!.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="round round-3">
+    <div class="round-title">SEMIFINALS</div>
+
+    <div class="match-group">
+      <div class="match" *ngFor="let matchIndex of [0, 1]">
+        <div class="player">
+          <span class="player-name">{{ quarterWinners[matchIndex * 2]?.name || 'TBD' }}</span>
+          <span class="player-score">{{ quarterWinners[matchIndex * 2]?.totalWins || 0 }}</span>
+        </div>
+        <div class="player">
+          <span class="player-name">{{ quarterWinners[matchIndex * 2 + 1]?.name || 'TBD' }}</span>
+          <span class="player-score">{{ quarterWinners[matchIndex * 2 + 1]?.totalWins || 0 }}</span>
+        </div>
+        <div class="match-actions">
+          <button class="play-btn" 
+                  (click)="playSemi(matchIndex)"
+                  [disabled]="!quarterWinners[matchIndex * 2] || !quarterWinners[matchIndex * 2 + 1]">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="quarterWinners[matchIndex * 2]"
+                    (click)="selectSemiWinner(matchIndex, 0)">
+              ✓ {{ quarterWinners[matchIndex * 2]!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="quarterWinners[matchIndex * 2 + 1]"
+                    (click)="selectSemiWinner(matchIndex, 1)">
+              ✓ {{ quarterWinners[matchIndex * 2 + 1]!.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="round round-final">
+    <div class="round-title">FINAL</div>
+
+    <div class="match-group final-group">
+      <div class="match final-match">
+        <div class="player">
+          <span class="player-name">{{ semiWinners[0]?.name || 'FINALIST 1' }}</span>
+          <span class="player-score">{{ semiWinners[0]?.totalWins || 0 }}</span>
+        </div>
+        <div class="player">
+          <span class="player-name">{{ semiWinners[1]?.name || 'FINALIST 2' }}</span>
+          <span class="player-score">{{ semiWinners[1]?.totalWins || 0 }}</span>
+        </div>
+        <div class="match-actions">
+          <button class="play-btn final-play-btn" 
+                  (click)="playFinal()"
+                  [disabled]="!semiWinners[0] || !semiWinners[1]">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="semiWinners[0]"
+                    (click)="selectChampion(0)">
+              ✓ {{ semiWinners[0]!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="semiWinners[1]"
+                    (click)="selectChampion(1)">
+              ✓ {{ semiWinners[1]!.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="champion-box">
+        <div class="champion-icon">★</div>
+        <div class="champion-text">CHAMPION</div>
+        <div class="champion-name">{{ champion?.name || 'TBD' }}</div>
+        <div class="champion-wins" *ngIf="champion">
+          TOTAL WINS: {{ champion.totalWins }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
