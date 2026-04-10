@@ -12,7 +12,11 @@
 
 <div class="bracket-container">
   <div class="round round-1">
-    <div class="round-title">ROUND OF 16</div>
+    <div class="round-title">
+      <button class="no-style" (click)="PlayAll16Round()">
+        ROUND OF 16
+      </button>
+    </div>
 
     <div class="match-group">
       <div class="match" *ngFor="let matchIndex of [0, 1, 2, 3]">
@@ -94,7 +98,11 @@
   </div>
 
   <div class="round round-2">
-    <div class="round-title">QUARTERFINALS</div>
+    <div class="round-title">
+      <button class="no-style" (click)="PlayAllQuarterRound()">
+        QUARTERFINALS
+      </button>
+    </div>
 
     <div class="match-group">
       <div class="match" *ngFor="let matchIndex of [0, 1, 2, 3]">
@@ -130,7 +138,11 @@
   </div>
 
   <div class="round round-3">
-    <div class="round-title">SEMIFINALS</div>
+    <div class="round-title">
+      <button class="no-style" (click)="PlayAllSemiRound()">
+        SEMIFINALS
+      </button>
+    </div>
 
     <div class="match-group">
       <div class="match" *ngFor="let matchIndex of [0, 1]">
@@ -166,7 +178,11 @@
   </div>
 
   <div class="round round-final">
-    <div class="round-title">FINAL</div>
+    <div class="round-title">
+      <button class="no-style" (click)="playFinal()">
+        FINAL
+      </button>
+    </div>
 
     <div class="match-group final-group">
       <div class="match final-match">
@@ -200,7 +216,11 @@
       </div>
 
       <div class="champion-box">
-        <div class="champion-icon">★</div>
+        <div class="champion-icon">
+          <button class="no-style" (click)="PlayAll16Round(); PlayAllQuarterRound(); PlayAllSemiRound(); playFinal();">
+            ★
+          </button>
+          </div>
         <div class="champion-text">CHAMPION</div>
         <div class="champion-name">{{ champion?.name || 'TBD' }}</div>
         <div class="champion-wins" *ngIf="champion">

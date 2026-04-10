@@ -650,3 +650,11 @@ body::before {
         padding: 4px 6px;
     }
 }
+
+.no-style {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}

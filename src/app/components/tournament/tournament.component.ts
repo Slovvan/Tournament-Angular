@@ -298,4 +298,23 @@ export class TournamentComponent implements OnInit, OnChanges {
     this.semiWinners.fill(null);
     this.champion = null;
   }
+
+  PlayAll16Round(): void {
+    //play all 8 matches in round of 16
+    for (let i = 0; i < 8; i++) {
+      this.playRound(i);
+    }
+  }
+  PlayAllQuarterRound(): void {
+    //play all 4 matches in quarterfinals
+    for (let i = 0; i < 4; i++) {
+      this.playQuarter(i);
+    }
+  }
+  PlayAllSemiRound(): void {
+    //play both semifinal matches
+    for (let i = 0; i < 2; i++) {
+      this.playSemi(i);
+    }
+  }
 }
