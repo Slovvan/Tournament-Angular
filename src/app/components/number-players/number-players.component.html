@@ -1,6 +1,33 @@
-<div>
-    <div>
-        <p>Select the number of players: {{ numPlayers() }}</p>
-        <input type="number" min="2" max="16" #playersInput (input)="onChangeNumber(playersInput.value)">
+<section class="number-players-wrapper">
+  <div class="number-players-header">
+    <h2 class="glitch title" data-text="Tournament">
+      Tournament
+    </h2>
+    <div class="header-line"></div>
+  </div>
+
+  <div class="number-players-container">
+    <div class="current-display">
+      <span class="label">Number of Players</span>
+      <span class="value">{{ numPlayers() }}</span>
     </div>
-</div>
+
+    <div class="input-group">
+      <div class="input-wrapper">
+        <label for="playersInput" class="input-label">Select Players</label>
+        <input 
+          id="playersInput" 
+          type="number" 
+          min="2" 
+          max="16" 
+          #playersInput 
+          (input)="onChangeNumber(playersInput.value)" 
+          class="player-input" 
+        />
+      </div>
+      <div class="range-info">
+        <span class="info-text"> MAX: 16</span>
+      </div>
+    </div>
+  </div>
+</section>
