@@ -11,6 +11,8 @@
 </div>
 
 <div class="bracket-container">
+  <!-- LADO IZQUIERDO -->
+  <!-- ROUND 1 IZQUIERDA - 4 matches (8 jugadores) -->
   <div class="round round-1">
     <div class="round-title">
       <button class="no-style" (click)="PlayAll16Round()">
@@ -56,47 +58,9 @@
         </div>
       </div>
     </div>
-
-    <div class="match-group">
-      <div class="match" *ngFor="let matchIndex of [4, 5, 6, 7]">
-        <div class="match-connector right"></div>
-        <div class="player" [class.player-inactive]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)">
-          <input class="player-name"
-                 [value]="getPlayerById((matchIndex - 4) * 2 + 8)?.name || getPlayerLabel((matchIndex - 4) * 2 + 8)"
-                 (input)="onChangePlayersName($any($event.target).value, (matchIndex - 4) * 2 + 8)"
-                 [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)" />
-          <span class="player-score">{{ getPlayerById((matchIndex - 4) * 2 + 8)?.totalWins || 0 }}</span>
-        </div>
-        <div class="player" [class.player-inactive]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)">
-          <input class="player-name"
-                 [value]="getPlayerById((matchIndex - 4) * 2 + 9)?.name || getPlayerLabel((matchIndex - 4) * 2 + 9)"
-                 (input)="onChangePlayersName($any($event.target).value, (matchIndex - 4) * 2 + 9)"
-                 [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)" />
-          <span class="player-score">{{ getPlayerById((matchIndex - 4) * 2 + 9)?.totalWins || 0 }}</span>
-        </div>
-        <div class="match-actions">
-          <button class="play-btn" 
-                  (click)="playRound(matchIndex)"
-                  [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8) || isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)">
-            🎲 ROLL DICE
-          </button>
-          <div class="select-buttons">
-            <button class="select-btn" 
-                    *ngIf="getPlayerById((matchIndex - 4) * 2 + 8) && !isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)"
-                    (click)="selectRoundWinner(matchIndex, 0)">
-              ✓ {{ getPlayerById((matchIndex - 4) * 2 + 8)!.name }}
-            </button>
-            <button class="select-btn" 
-                    *ngIf="getPlayerById((matchIndex - 4) * 2 + 9) && !isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)"
-                    (click)="selectRoundWinner(matchIndex, 1)">
-              ✓ {{ getPlayerById((matchIndex - 4) * 2 + 9)!.name }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
+  <!-- QUARTERFINALS IZQUIERDA - 2 matches -->
   <div class="round round-2">
     <div class="round-title">
       <button class="no-style" (click)="PlayAllQuarterRound()">
@@ -105,7 +69,8 @@
     </div>
 
     <div class="match-group">
-      <div class="match" *ngFor="let matchIndex of [0, 1, 2, 3]">
+      <div class="match" *ngFor="let matchIndex of [0, 1]">
+        <div class="match-connector right"></div>
         <div class="player">
           <span class="player-name">{{ roundWinners[matchIndex * 2]?.name || 'TBD' }}</span>
           <span class="player-score">{{ roundWinners[matchIndex * 2]?.totalWins || 0 }}</span>
@@ -137,6 +102,7 @@
     </div>
   </div>
 
+  <!-- SEMIFINALS IZQUIERDA - 1 match -->
   <div class="round round-3">
     <div class="round-title">
       <button class="no-style" (click)="PlayAllSemiRound()">
@@ -145,31 +111,32 @@
     </div>
 
     <div class="match-group">
-      <div class="match" *ngFor="let matchIndex of [0, 1]">
+      <div class="match">
+        <div class="match-connector right"></div>
         <div class="player">
-          <span class="player-name">{{ quarterWinners[matchIndex * 2]?.name || 'TBD' }}</span>
-          <span class="player-score">{{ quarterWinners[matchIndex * 2]?.totalWins || 0 }}</span>
+          <span class="player-name">{{ quarterWinners[0]?.name || 'TBD' }}</span>
+          <span class="player-score">{{ quarterWinners[0]?.totalWins || 0 }}</span>
         </div>
         <div class="player">
-          <span class="player-name">{{ quarterWinners[matchIndex * 2 + 1]?.name || 'TBD' }}</span>
-          <span class="player-score">{{ quarterWinners[matchIndex * 2 + 1]?.totalWins || 0 }}</span>
+          <span class="player-name">{{ quarterWinners[1]?.name || 'TBD' }}</span>
+          <span class="player-score">{{ quarterWinners[1]?.totalWins || 0 }}</span>
         </div>
         <div class="match-actions">
           <button class="play-btn" 
-                  (click)="playSemi(matchIndex)"
-                  [disabled]="!quarterWinners[matchIndex * 2] || !quarterWinners[matchIndex * 2 + 1]">
+                  (click)="playSemi(0)"
+                  [disabled]="!quarterWinners[0] || !quarterWinners[1]">
             🎲 ROLL DICE
           </button>
           <div class="select-buttons">
             <button class="select-btn" 
-                    *ngIf="quarterWinners[matchIndex * 2]"
-                    (click)="selectSemiWinner(matchIndex, 0)">
-              ✓ {{ quarterWinners[matchIndex * 2]!.name }}
+                    *ngIf="quarterWinners[0]"
+                    (click)="selectSemiWinner(0, 0)">
+              ✓ {{ quarterWinners[0]!.name }}
             </button>
             <button class="select-btn" 
-                    *ngIf="quarterWinners[matchIndex * 2 + 1]"
-                    (click)="selectSemiWinner(matchIndex, 1)">
-              ✓ {{ quarterWinners[matchIndex * 2 + 1]!.name }}
+                    *ngIf="quarterWinners[1]"
+                    (click)="selectSemiWinner(0, 1)">
+              ✓ {{ quarterWinners[1]!.name }}
             </button>
           </div>
         </div>
@@ -177,6 +144,7 @@
     </div>
   </div>
 
+  <!-- CENTRO - FINAL -->
   <div class="round round-final">
     <div class="round-title">
       <button class="no-style" (click)="playFinal()">
@@ -220,11 +188,144 @@
           <button class="no-style" (click)="PlayAll16Round(); PlayAllQuarterRound(); PlayAllSemiRound(); playFinal();">
             ★
           </button>
-          </div>
+        </div>
         <div class="champion-text">CHAMPION</div>
         <div class="champion-name">{{ champion?.name || 'TBD' }}</div>
         <div class="champion-wins" *ngIf="champion">
           TOTAL WINS: {{ champion.totalWins }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LADO DERECHO -->
+  <!-- SEMIFINALS DERECHA - 1 match -->
+  <div class="round round-3">
+    <div class="round-title">
+      <button class="no-style" (click)="PlayAllSemiRound()">
+        SEMIFINALS
+      </button>
+    </div>
+
+    <div class="match-group">
+      <div class="match">
+        <div class="match-connector left"></div>
+        <div class="player">
+          <span class="player-score">{{ quarterWinners[2]?.totalWins || 0 }}</span>
+          <span class="player-name">{{ quarterWinners[2]?.name || 'TBD' }}</span>
+        </div>
+        <div class="player">
+          <span class="player-score">{{ quarterWinners[3]?.totalWins || 0 }}</span>
+          <span class="player-name">{{ quarterWinners[3]?.name || 'TBD' }}</span>
+        </div>
+        <div class="match-actions">
+          <button class="play-btn" 
+                  (click)="playSemi(1)"
+                  [disabled]="!quarterWinners[2] || !quarterWinners[3]">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="quarterWinners[2]"
+                    (click)="selectSemiWinner(1, 0)">
+              ✓ {{ quarterWinners[2]!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="quarterWinners[3]"
+                    (click)="selectSemiWinner(1, 1)">
+              ✓ {{ quarterWinners[3]!.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUARTERFINALS DERECHA - 2 matches -->
+  <div class="round round-2">
+    <div class="round-title">
+      <button class="no-style" (click)="PlayAllQuarterRound()">
+        QUARTERFINALS
+      </button>
+    </div>
+
+    <div class="match-group">
+      <div class="match" *ngFor="let matchIndex of [2, 3]">
+        <div class="match-connector left"></div>
+        <div class="player">
+          <span class="player-score">{{ roundWinners[matchIndex * 2]?.totalWins || 0 }}</span>
+          <span class="player-name">{{ roundWinners[matchIndex * 2]?.name || 'TBD' }}</span>
+        </div>
+        <div class="player">
+          <span class="player-score">{{ roundWinners[matchIndex * 2 + 1]?.totalWins || 0 }}</span>
+          <span class="player-name">{{ roundWinners[matchIndex * 2 + 1]?.name || 'TBD' }}</span>
+        </div>
+        <div class="match-actions">
+          <button class="play-btn" 
+                  (click)="playQuarter(matchIndex)"
+                  [disabled]="!roundWinners[matchIndex * 2] || !roundWinners[matchIndex * 2 + 1]">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="roundWinners[matchIndex * 2]"
+                    (click)="selectQuarterWinner(matchIndex, 0)">
+              ✓ {{ roundWinners[matchIndex * 2]!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="roundWinners[matchIndex * 2 + 1]"
+                    (click)="selectQuarterWinner(matchIndex, 1)">
+              ✓ {{ roundWinners[matchIndex * 2 + 1]!.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 1 DERECHA - 4 matches (8 jugadores) -->
+  <div class="round round-1">
+    <div class="round-title">
+      <button class="no-style" (click)="PlayAll16Round()">
+        ROUND OF 16
+      </button>
+    </div>
+
+    <div class="match-group">
+      <div class="match" *ngFor="let matchIndex of [4, 5, 6, 7]">
+        <div class="match-connector left"></div>
+        <div class="player" [class.player-inactive]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)">
+          <span class="player-score">{{ getPlayerById((matchIndex - 4) * 2 + 8)?.totalWins || 0 }}</span>
+          <input class="player-name"
+                 [value]="getPlayerById((matchIndex - 4) * 2 + 8)?.name || getPlayerLabel((matchIndex - 4) * 2 + 8)"
+                 (input)="onChangePlayersName($any($event.target).value, (matchIndex - 4) * 2 + 8)"
+                 [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)" />
+        </div>
+        <div class="player" [class.player-inactive]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)">
+          <span class="player-score">{{ getPlayerById((matchIndex - 4) * 2 + 9)?.totalWins || 0 }}</span>
+          <input class="player-name"
+                 [value]="getPlayerById((matchIndex - 4) * 2 + 9)?.name || getPlayerLabel((matchIndex - 4) * 2 + 9)"
+                 (input)="onChangePlayersName($any($event.target).value, (matchIndex - 4) * 2 + 9)"
+                 [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)" />
+        </div>
+        <div class="match-actions">
+          <button class="play-btn" 
+                  (click)="playRound(matchIndex)"
+                  [disabled]="isPlayerSlotDisabled((matchIndex - 4) * 2 + 8) || isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)">
+            🎲 ROLL DICE
+          </button>
+          <div class="select-buttons">
+            <button class="select-btn" 
+                    *ngIf="getPlayerById((matchIndex - 4) * 2 + 8) && !isPlayerSlotDisabled((matchIndex - 4) * 2 + 8)"
+                    (click)="selectRoundWinner(matchIndex, 0)">
+              ✓ {{ getPlayerById((matchIndex - 4) * 2 + 8)!.name }}
+            </button>
+            <button class="select-btn" 
+                    *ngIf="getPlayerById((matchIndex - 4) * 2 + 9) && !isPlayerSlotDisabled((matchIndex - 4) * 2 + 9)"
+                    (click)="selectRoundWinner(matchIndex, 1)">
+              ✓ {{ getPlayerById((matchIndex - 4) * 2 + 9)!.name }}
+            </button>
+          </div>
         </div>
       </div>
     </div>

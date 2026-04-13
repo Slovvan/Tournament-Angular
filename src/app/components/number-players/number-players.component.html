@@ -21,6 +21,7 @@
           min="2" 
           max="16" 
           #playersInput 
+          ng-pattern="/^[0-9]{1,2}$/"
           (input)="onChangeNumber(playersInput.value)" 
           class="player-input" 
         />
